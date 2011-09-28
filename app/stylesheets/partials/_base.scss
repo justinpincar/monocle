@@ -1,0 +1,84 @@
+html {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+body {
+    @include blueprint-typography(true);
+    background: $site-background;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    > #content {
+        @include container;
+        width: $blueprint-container-size;
+        min-height: 600px;
+
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 60px;
+    }
+
+    a, a:visited {
+        text-decoration: none;
+        color: $medium-gray;
+    }
+
+    a:hover, a:active {
+        text-decoration: underline;
+        color: darken($medium-gray, 20%);
+    }
+
+    h2 {
+        display: inline-block;
+        border-bottom: 1px solid $light-black;
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+
+    h3 {
+        display: inline-block;
+        border-bottom: 1px solid $light-black;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    input[type='text'] {
+        &:disabled {
+            background-color: $light-gray;
+        }
+    }
+}
+
+@mixin rounded-button($background-color: $light-black, $text-color: $white, $height: 25px) {
+    border-width: 0px;
+    background-color: $background-color;
+    color: $text-color;
+    cursor: pointer;
+    @include border-radius(3px);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    text-align: center;
+    text-decoration: none;
+    height: $height;
+    min-width: 90px;
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+        color: darken($text-color, 20%);
+    }
+
+    &:active {
+        margin-top: 1px;
+        color: darken($text-color, 40%);
+    }
+
+    &:disabled {
+        color: darken($text-color, 40%);
+        background-color: darken($background-color, 40%);
+    }
+}
+
+input[type='submit'], button {
+    @include rounded-button();
+}

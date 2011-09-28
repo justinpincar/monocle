@@ -1,0 +1,41 @@
+#footer {
+    clear: both;
+    display: block;
+    height: 60px;
+    width: 100%;
+
+    > .container {
+        margin: 0px auto;
+        padding: 0px;
+        position: relative;
+        width: 960px;
+        margin-top: 60px;
+
+        ul {
+            float: none;
+            clear: both;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            list-style-type: none;
+
+            li {
+                float: left;
+                clear: none;
+                margin: 0;
+                padding: 2px 10px;
+                border-right: 1px solid #DDD;
+                font-family: ff-meta-web-pro-1, ff-meta-web-pro-2, "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 12px;
+                padding-bottom: 3px;
+                padding-left: 8px;
+                padding-right: 8px;
+
+                &:last-child {
+                    border: none;
+                }
+            }
+        }
+    }
+}

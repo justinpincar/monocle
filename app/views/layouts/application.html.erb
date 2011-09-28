@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>Monocle</title>
+
+      <link rel="shortcut icon" href="/favicon.ico" />
+
+      <%= stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection' %>
+      <%= stylesheet_link_tag 'compiled/print.css', :media => 'print' %>
+      <!--[if IE]><%= stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection' %><![endif]-->
+      <%= content_for(:stylesheets) %>
+
+      <!--
+      <%= javascript_include_tag 'jquery.js' %>
+      <%= javascript_include_tag 'jquery.form.js' %>
+      <%= javascript_include_tag 'rails.js' %>
+      <%= javascript_include_tag 'application.js' %>
+      -->
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/monocle.css">
+    <script type="text/javascript" src="/javascripts/cometd.js"></script>
+    <script type="text/javascript" src="/javascripts/AckExtension.js"></script>
+    <script type="text/javascript" src="/javascripts/ReloadExtension.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-1.6.2.js"></script>
+    <script type="text/javascript" src="/javascripts/json2.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.cometd.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.cometd-reload.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.color.js"></script>
+
+      <%= content_for(:javascripts) %>
+
+      <%= csrf_meta_tag %>
+    </head>
+    <body class="<%= controller.controller_path.gsub("/", " ") %> <%= controller.controller_name %> <%= controller.action_name %>">
+        <% if notice.present? or alert.present? %>
+            <div id="notice-wrapper">
+              <div id="notice">
+                <div><%= notice %></div>
+                <div><%= alert %></div>
+              </div>
+            </div>
+            <script>
+              $(function() {
+                  $('#notice').click(function() {
+                      $('#notice-wrapper').fadeOut();
+                  });
+                  setTimeout(function() {$('#notice-wrapper').fadeOut()}, 5000);
+              });
+            </script>
+        <% end %>
+
+        <div id="header">
+            <div class="container">
+              <div class="left">
+                <a href="/" id="logo">
+                  <img alt="Monocle" src="/images/logo_white.png" />
+                </a>
+                <ul id="site_nav">
+                  <% if account_signed_in? %>
+                    <li>
+                      <a href="<%= monocle_path %>">Monocle</a>
+                    </li>
+                  <% else %>
+                    <li>
+                      <a href="#">Library</a>
+                    </li>
+                    <li>
+                      <a href="#">Random</a>
+                    </li>
+                   <% end %>
+                </ul>
+              </div>
+              <div class="right">
+                <% if account_signed_in? %>
+                    <a href="<%= destroy_account_session_path %>" id="user_nav"><span class="weak">Sign out</span></a>
+                    <a href="<%= account_path(current_account) %>" id="user_nav"><span class="weak"><%= current_account.email %></span></a>
+                <% else %>
+                    <span id="user_nav">
+                        <a href="<%= new_account_session_path %>">Log in</a>
+                        <span class="weak"> or </span>
+                        <a href="<%= new_account_registration_path %>">Sign up</a>
+                    </span>
+                <% end %>
+              </div>
+            </div>
+        </div>
+
+        <div id="content">
+            <%= yield %>
+        </div>
+
+        <div id="footer">
+          <div class="container">
+            <ul>
+                <li><a href="<%= about_path %>">About</a></li>
+                <li><a href="<%= team_path %>">Team</a></li>
+                <li><a href="<%= jobs_path %>">Jobs</a></li>
+                <li><a href="<%= press_path %>">Press</a></li>
+                <li><a href="<%= privacy_path %>">Privacy</a></li>
+                <li><a href="<%= terms_path %>">Terms</a></li>
+            </ul>
+           </div>
+        </div>
+    </body>
+</html>

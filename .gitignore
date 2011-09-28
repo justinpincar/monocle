@@ -1,0 +1,17 @@
+.idea
+.bundle
+db/*.sqlite3
+config/database.yml
+log/*
+tmp/
+solr/
+*.swp
+*~
+.DS_Store
+public/stylesheets/compiled/*
+public/stylesheets/ie.css
+public/stylesheets/print.css
+public/stylesheets/screen.css
+spec/fixtures/*.yml
+*.pid
+coverage/
