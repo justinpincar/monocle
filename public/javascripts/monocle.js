@@ -1,7 +1,9 @@
 (function($) {
     $(document).ready(function() {
-        var monocle = new Monocle();
-        monocle.join();
+        window.monocle = new Monocle();
+        window.monocle.join();
+
+        window.messages = [];
     });
 
     function Monocle() {
@@ -24,8 +26,10 @@
         };
 
         this.receive = function(message) {
-            var userId = message.data.userId;
-            var href = message.data.href;
+            window.messages.push(message);
+
+            var userId = message.data.u;
+            var href = message.data.d.h;
             var ts = message.data.ts;
 
             var block = $('#' + userId);

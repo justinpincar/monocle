@@ -1,4 +1,6 @@
-@@db = Mongo::Connection.new("localhost", 27017).db("monocle-#{Rails.env}")
+@@db = Mongo::Connection.new("staff.mongohq.com", 10085).db("monocle-production")
+@@db.authenticate("monocle", "monocle_mongo")
 
-MongoMapper.connection = Mongo::Connection.new('localhost', 27017, :logger => Rails.logger)
-MongoMapper.database = "monocle-#{Rails.env}"
+MongoMapper.connection = Mongo::Connection.new('staff.mongohq.com', 10085, :logger => Rails.logger)
+MongoMapper.database = "monocle-production"
+MongoMapper.database.authenticate('monocle', 'monocle_mongo')

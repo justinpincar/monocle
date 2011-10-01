@@ -1,0 +1,18 @@
+This is the events index.<br />
+<br />
+Total events: <%= @events.count %><br />
+<br />
+<% @events.each do |event| %>
+ Id: <%= link_to(event["_id"], event_path(event["_id"])) %><br />
+ Display name: <%= event["display"] %><br />
+ Type: <%= event["type"] %><br />
+    <br />
+<% end %>
+<br />
+<br />
+<%= form_tag(events_path, :method => "post") do %>
+    Display name: <%= text_field_tag("event[display]") %><br />
+    Type: <%= radio_button_tag("event[type]", 0) %>URL<br />
+    Url Pattern: <%= text_field_tag("event[pattern]") %><br />
+    <%= submit_tag("Create event") %>
+<% end %>
