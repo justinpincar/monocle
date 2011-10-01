@@ -2,7 +2,7 @@ Monocle::Application.routes.draw do
   devise_for :accounts
 
   resources :accounts, :only => [:show, :new, :create, :edit, :update]
-  resources :events, :only => [:index, :create, :show]
+  resources :events, :only => [:index, :create, :show, :update]
   resources :users, :only => [:index, :show]
 
   match '/monocle' => 'monocle#index', :as => :monocle
@@ -13,6 +13,8 @@ Monocle::Application.routes.draw do
   match '/privacy' => 'home#privacy', :as => :privacy
   match '/team' => 'home#team', :as => :team
   match '/terms' => 'home#terms', :as => :terms
+
+  match '/ma' => 'home#ma'
 
   root :to => "home#index"
 end

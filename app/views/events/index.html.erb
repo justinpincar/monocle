@@ -3,9 +3,12 @@ This is the events index.<br />
 Total events: <%= @events.count %><br />
 <br />
 <% @events.each do |event| %>
- Id: <%= link_to(event["_id"], event_path(event["_id"])) %><br />
- Display name: <%= event["display"] %><br />
- Type: <%= event["type"] %><br />
+ Id: <%= link_to(event._id, event_path(event._id)) %><br />
+ Display name: <%= event.display %><br />
+ Type: <%= event.type %><br />
+    <% if event.type == 0 %>
+    Url Pattern: <%= event.pattern %><br />
+        <% end %>
     <br />
 <% end %>
 <br />

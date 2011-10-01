@@ -2,11 +2,17 @@ class Event
   attr_accessor :_id, :display, :type, :c_at, :u_at
 
   def self.build(event, params={})
-    event_params = params[:event]
+    event_params = params["event"]
 
-    event.type = event_params[:type].to_i
-    event.display = event_params[:display]
+    event._id = event_params["_id"] if event_params["_id"].present?
+    event.type = event_params["type"].to_i if event_params["type"].present?
+    event.display = event_params["display"] if event_params["display"].present?
     event
+  end
+
+  def update(params={})
+    self.type = params["type"].to_i if params["type"].present?
+    self.display = params["display"] if params["display"].present?
   end
 
   def save(account_id)
@@ -21,10 +27,34 @@ class Event
   end
 
   def self.all(account_id)
-    @@db.collection("events_#{account_id}").find()
+    events = []
+
+    events_params = @@db.collection("events_#{account_id}").find()
+    events_params.each do |params|
+      event = generate(params)
+      events.push(event)
+    end
+
+    events
   end
 
   def self.find(account_id, id)
-    @@db.collection("events_#{account_id}").find({_id: BSON::ObjectId.from_string(id)}).first
+    id = BSON::ObjectId.from_string(id) if id.is_a?(String)
+    params = @@db.collection("events_#{account_id}").find({_id: id}).first
+    generate(params)
+  end
+
+  private
+
+  def self.generate(params)
+    return nil if (params.nil? or params["type"].nil?)
+    type = params["type"].to_i
+    params = {"event" => params}
+    case type
+      when 0
+        UrlEvent.build(params)
+      else
+        raise "Unknown type: #{type}"
+    end
   end
 end

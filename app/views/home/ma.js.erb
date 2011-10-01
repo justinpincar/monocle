@@ -1,0 +1,127 @@
+function sendEvent(paramsString) {
+    queryString = "accountId=<%= @account._id %>";
+    queryString += "&userId=" + _maq.userId;
+    queryString += "&" + paramsString;
+
+    var ma = document.createElement('script');
+    ma.type = 'text/javascript';
+    ma.async = true;
+    ma.src = ('https:' == document.location.protocol ? 'https://sidesp.in/events/?' : 'http://events.sidesp.in/?') + queryString;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ma, s);
+}
+
+function generateEvent(eventArray) {
+    var action = eventArray[0];
+
+    if (action == "_trackPageview") {
+        paramsString = "href=" + encodeURIComponent(document.location.href);
+
+        var url_events = []
+        <% @events.each do |event| %>
+            url_events.push({id: '<%= event._id %>', pattern: '<%= event.pattern_js %>'});
+        <% end %>
+
+        var href = document.location.href;
+
+        for (var i = 0; i < url_events.length; i++) {
+            var regex = new RegExp(url_events[i].pattern);
+            if (regex.test(href)) {
+                paramsString += "&eventId=" + url_events[i].id;
+                break;
+            }
+        }
+    }
+    else if (action == "_trackEvent") {
+        paramsString = "href=" + encodeURIComponent(document.location.href);
+        paramsString += "&eventId=" + eventArray[1];
+    }
+    else {
+        return;
+    }
+
+    sendEvent(paramsString);
+}
+
+function getCookie(c_name) {
+    var i,x,y,ARRcookies = document.cookie.split(";");
+    for (i = 0; i < ARRcookies.length; i++) {
+        x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+        x = x.replace(/^\s+|\s+$/g, "");
+        if (x == c_name) {
+            return decodeURIComponent(y);
+        }
+    }
+
+    return null;
+}
+
+function setCookie(c_name, value, exdays) {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = encodeURIComponent(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString()) + "; path=/";
+    document.cookie = c_name + "=" + c_value;
+}
+
+function uuid() {
+    return 'xxxxxxxxxxxxxxxxxxxxxxxx'.replace(/[x]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function ma_load() {
+    _maq = _maq || [];
+    _maq.userId = getCookie("_maq_userId");
+    if (!_maq.userId) {
+        _maq.userId = uuid();
+        setCookie("_maq_userId", _maq.userId, 365 * 5);
+    }
+
+    for (var i = 0; i < _maq.length; i++) {
+        generateEvent(_maq[i]);
+    }
+
+    _maq.push = function() {
+        for (var i = 0, l = arguments.length; i < l; i++) {
+            this[this.length] = arguments[i];
+
+            generateEvent(arguments[i]);
+        }
+
+        return this.length;
+    };
+
+    // TODO: Make cross-browser compatible and dynamic, and handle case where element doesn't exist (or multiple elements).
+    // document.getElementById("right-bar").addEventListener('click', function() { _maq.push(['_trackEvent', 1]);}, false);
+}
+
+function ma_load_fallback() {
+    setTimeout("if (!ma_loaded) { ma_load() }", 0);
+}
+
+var ma_loaded = 0;
+if (document.addEventListener) {
+    document.addEventListener("DOMContentLoaded", function() {
+        ma_loaded = 1;
+        ma_load();
+    }, false);
+}
+else if (document.all && !window.opera) {
+    document.write('<script type="text/javascript" id="contentloadtag" defer="defer" src="javascript:void(0)"><\/script>');
+    var contentloadtag = document.getElementById("contentloadtag");
+    contentloadtag.onreadystatechange = function() {
+        if (this.readyState == "complete") {
+            ma_loaded = 1;
+            ma_load();
+        }
+    };
+}
+
+if (window.addEventListener) {
+    window.addEventListener('load', ma_load_fallback, false);
+}
+else if (window.attachEvent) {
+    window.attachEvent('onload', ma_load_fallback);
+}

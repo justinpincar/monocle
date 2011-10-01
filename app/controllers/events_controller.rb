@@ -17,10 +17,20 @@ class EventsController < ApplicationController
     end
 
     event.save(current_account.id)
-    redirect_to event_path(event)
+    redirect_to event_path(event._id)
   end
 
   def show
     @event = Event.find(current_account.id, params[:id])
+  end
+
+  def update
+    event_params = params[:event]
+
+    event = Event.find(current_account.id, event_params[:_id])
+
+    event.update(event_params)
+    event.save(current_account.id)
+    redirect_to event_path(event._id)
   end
 end
