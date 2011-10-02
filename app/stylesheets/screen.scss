@@ -1,6 +1,5 @@
 @import "blueprint";
 @import "blueprint/reset";
-@import "blueprint/typography";
 @import "compass/css3/border-radius";
 @import "compass/css3/transform";
 @import "compass/css3/transition";
@@ -17,3 +16,5 @@ $blueprint-grid-width: ($blueprint-container-size / $blueprint-grid-columns) - $
 @import "partials/header";
 @import "partials/footer";
 @import "partials/shared";
+
+@import "partials/home";

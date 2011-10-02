@@ -40,9 +40,7 @@
 
                 li {
                     border: none;
-                    font-size: 13px;
                     color: $light-black;
-                    font-weight: normal;
                     float: left;
                     clear: none;
                     margin: 0;
@@ -73,7 +71,6 @@
                 text-decoration: none;
                 margin: 12px 0 0 10px;
                 color: white;
-                font-size: 13px;
 
                 .weak {
                     color: $medium-gray;
@@ -112,7 +109,6 @@
         background: $light-blue-gray;
         text-align: center;
         border: 2px solid $medium-blue-gray;
-        font-size: 12px;
         -moz-box-shadow: rgba(0,0,0,0.2) 0 2px 8px 5px;
         -webkit-box-shadow: rgba(0,0,0,0.2) 0 2px 8px 5px;
         -o-box-shadow: rgba(0,0,0,0.2) 0 2px 8px 5px;

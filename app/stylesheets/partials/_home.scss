@@ -1,0 +1,116 @@
+/* Override page width for this block, careful to have our own containers. */
+body.home.index {
+    > #content {
+        width: 100%;
+    }
+
+    .main {
+        > .intro {
+            background: #EBF3F9 url(/images/home-intro-bg.png) repeat-x top left;
+            border-bottom: 4px solid #E1EDF5;
+            padding-top: 20px;
+            padding-bottom: 20px;
+
+            .block {
+                @include container;
+                width: $blueprint-container-size;
+                position: relative;
+
+                .home-intro {
+                    float: left;
+                    width: 450px;
+
+                    .home-leader {
+                        margin-top: 20px;
+                        font-size: 22px;
+                        color: darken($green, 8%);
+
+                        strong {
+                            font-size: 36px;
+                            font-weight: 600;
+                            line-height: 36px;
+                        }
+                    }
+
+                    .home-detail {
+                        margin: 15px 0 0 0;
+                        font-size: 18px;
+                        color: #6C7980;
+
+                        ul, ol {
+                            margin: 0 0 1.33em 0;
+                            line-height: 1.33em;
+                            padding: 0 0 0 30px;
+
+                            li {
+                                margin: 0 0 10px 0;
+                            }
+                        }
+                    }
+
+                    .home-cta {
+                        a {
+                            font-size: 24px;
+                            margin-left: 15px;
+                            font-weight: 600;
+                            color: $orange;
+                        }
+                    }
+                }
+
+                .home-graphic {
+                    float: right;
+
+                    .graphic {
+                        width: 535px;
+                        height: 270px;
+                    }
+                }
+            }
+        }
+
+        > .more {
+            @include container;
+            width: $blueprint-container-size;
+            padding-top: 20px;
+
+            .blocks {
+                padding-top: 8px;
+
+                .block {
+                    float: left;
+                    width: span(8) - 12px;
+                    margin-top: 4px;
+                    margin-right: span(1);
+
+                    &.last {
+                        margin-right: 0px;
+                    }
+
+                    .pic-frame {
+                        height: 150px;
+                        background: #FCFCFC;
+                        border: 1px solid #DBDBDB;
+                        padding: 9px 10px 10px 8px;
+                        -webkit-box-shadow: #E6E6E6 0px 5px 5px;
+
+                        .pic {
+                            border: 1px solid #EEE;
+                            width: 100%;
+                            height: 100%;
+                        }
+                     }
+
+                    h3 {
+                        font-weight: 600;
+                        border-bottom: none;
+                    }
+
+                    .description {
+                        padding-top: 16px;
+                    }
+                }
+            }
+        }
+    }
+}

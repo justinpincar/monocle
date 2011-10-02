@@ -6,7 +6,10 @@ html {
 body {
     @include blueprint-typography(true);
     background: $site-background;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: $light-black;
 
     > #content {
         @include container;
@@ -32,14 +35,14 @@ body {
         display: inline-block;
         border-bottom: 1px solid $light-black;
         margin-bottom: 5px;
-        font-size: 18px;
+        font-size: 20px;
     }
 
     h3 {
         display: inline-block;
         border-bottom: 1px solid $light-black;
         margin-bottom: 5px;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     input[type='text'] {
