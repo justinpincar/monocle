@@ -1,7 +1,20 @@
-
-Id: <%= @user._id %><br />
-<br />
+<div class="main">
+  <h1>User :: <%= @user._id %></h1>
+  <div>
+    <div style="float:right; border: 1px solid black; padding: 6px;">
+        <h3>User Dossier</h3>
+        <div>
+          Id: <%= @user._id %><br />
+          Name: <%= @user.display || "(unknown)" %><br />
+          Email: <%= @user.email || "(unknown)" %><br />
+          First seen: <%= @user.c_at %><br />
+          Last seen: <%= @user.u_at %><br />
+        </div>
+    </div>
+    Event trail:<br/>
     <% @user.analytics(current_account.id).each do |analytic| %>
-        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %><br />
+        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %>
+        <br/>
     <% end %>
-    <br />
+  </div>
+</div>

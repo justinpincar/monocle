@@ -1,3 +1,8 @@
-This is your account page.<br />
-<br />
-Your id is: <%= current_account.id %>
+<div class="main">
+  <h3>Account</h3>
+
+  <div>
+    Include this JavaScript inside the &lt;head/&gt; element on any pages you wish to track.<br />
+    <textarea rows="13" style="border:  1px solid black; padding:  8px; width: 600px;"><%= render :partial => "home/ma_inc", :locals => {:accountId => current_account.id} %></textarea>
+  </div>
+</div>

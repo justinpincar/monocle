@@ -34,7 +34,7 @@
 
       <%= csrf_meta_tag %>
 
-    <%= render :partial => "home/ma_inc" %>
+    <%= render :partial => "home/ma_inc", :locals => {:accountId => '4e868f5702d91a0217000004'} %>
 
     </head>
     <body class="<%= controller.controller_path.gsub("/", " ") %> <%= controller.controller_name %> <%= controller.action_name %>">

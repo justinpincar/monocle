@@ -8,7 +8,7 @@ body.home.index {
         > .intro {
             background: #EBF3F9 url(/images/home-intro-bg.png) repeat-x top left;
             border-bottom: 4px solid #E1EDF5;
-            padding-top: 20px;
+            padding-top: 10px;
             padding-bottom: 20px;
 
             .block {
@@ -77,6 +77,8 @@ body.home.index {
             h2 {
                 font-size: 24px;
                 font-style: italic;
+                border-bottom: 1px solid $light-black;
+                color: $light-black;
             }
 
             .blocks {

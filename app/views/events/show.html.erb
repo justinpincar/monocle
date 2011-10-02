@@ -1,17 +1,23 @@
-events#show<br />
-<br />
- Id: <%= @event._id %><br />
- Display name: <%= @event.display %><br />
- Type: <%= @event.type %><br />
-<br />
-<br />
-<br />
+<div class="main">
+  <h1>Event :: <%= @event.display %></h1>
 
+  <div>
+    <div style="float: right; padding: 8px; border:  1px solid black;">
+      <h3>Update Event</h3>
+      <%= form_tag(event_path(@event._id), :method => "put") do %>
+          <%= hidden_field_tag("event[_id]", @event._id) %>
+          Display name: <%= text_field_tag("event[display]", @event.display) %>
+          <br/>
+          Type: <%= radio_button_tag("event[type]", 0, @event.type == 0) %>URL<br/>
+          Url Pattern: <%= text_field_tag("event[pattern]", @event.pattern) %>
+          <br/>
+          <%= submit_tag("Update") %>
+      <% end %>
+    </div>
 
-<%= form_tag(event_path(@event._id), :method => "put") do %>
-    <%= hidden_field_tag("event[_id]", @event._id) %>
-    Display name: <%= text_field_tag("event[display]", @event.display) %><br />
-    Type: <%= radio_button_tag("event[type]", 0) %>URL<br />
-    Url Pattern: <%= text_field_tag("event[pattern]", @event.pattern) %><br />
-    <%= submit_tag("Update event") %>
-<% end %>
+    <br/>
+    Id: <%= @event._id %><br />
+    Created At: <%= @event.c_at %><br />
+    Updated At: <%= @event.u_at %><br />
+  </div>
+</div>

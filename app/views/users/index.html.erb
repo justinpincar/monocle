@@ -1,7 +1,11 @@
-This is the users index.<br />
-<br />
-Total users: <%= @users.count %><br />
-<br />
-<% @users.each do |user| %>
- Id: <%= link_to user._id, user_path(user._id) %> (last seen <%= user.u_at %>)<br />
-<% end %>
+<div class="main">
+  <h1>Users</h1>
+
+  <br/>
+  Total users: <%= @users.count %>
+  <br/>
+  <br/>
+  <% @users.each do |user| %>
+      <%= link_to (user.display || user._id), user_path(user._id) %> (last seen <%= user.u_at %>)<br/>
+  <% end %>
+</div>

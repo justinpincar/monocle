@@ -18,7 +18,7 @@ body {
 
         margin-left: auto;
         margin-right: auto;
-        margin-top: 60px;
+        margin-top: 70px;
     }
 
     a, a:visited {
@@ -31,17 +31,24 @@ body {
         color: darken($medium-gray, 20%);
     }
 
-    h2 {
+    h1 {
+        color: $orange;
         display: inline-block;
-        border-bottom: 1px solid $light-black;
-        margin-bottom: 5px;
+        margin-bottom: 7px;
+        font-size: 24px;
+    }
+
+    h2 {
+        color: $orange;
+        display: inline-block;
+        margin-bottom: 7px;
         font-size: 20px;
     }
 
     h3 {
+        color: $orange;
         display: inline-block;
-        border-bottom: 1px solid $light-black;
-        margin-bottom: 5px;
+        margin-bottom: 7px;
         font-size: 18px;
     }
 
