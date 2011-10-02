@@ -74,6 +74,11 @@ body.home.index {
             width: $blueprint-container-size;
             padding-top: 20px;
 
+            h2 {
+                font-size: 24px;
+                font-style: italic;
+            }
+
             .blocks {
                 padding-top: 8px;
 
