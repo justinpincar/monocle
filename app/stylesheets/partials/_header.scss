@@ -27,6 +27,24 @@
                 clear: none;
                 float: left;
                 padding: 5px 0px 0px 0px;
+                height: 34px;
+                width: 400px;
+
+                img {
+                    float: left;
+                    height: 34px;
+                    width: 34px;
+                }
+
+                div {
+                    float: left;
+                    margin-top: 3px;
+                    margin-left: 6px;
+                    height: 40px;
+                    color: $white;
+                    font-size: 22px;
+                    font-weight: 400;
+                }
             }
 
             ul#site_nav {
