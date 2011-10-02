@@ -47,6 +47,11 @@ body {
             background-color: $light-gray;
         }
     }
+
+    ul, ol {
+        margin: 0px;
+        padding: 0px;
+    }
 }
 
 @mixin rounded-button($background-color: $light-black, $text-color: $white, $height: 25px) {
