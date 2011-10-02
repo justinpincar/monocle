@@ -1,9 +1,10 @@
 Monocle::Application.routes.draw do
   devise_for :accounts
 
-  resources :accounts, :only => [:show, :new, :create, :edit, :update]
   resources :events, :only => [:index, :create, :show, :update]
   resources :users, :only => [:index, :show]
+
+  match '/account' => 'accounts#show', :as => :account
 
   match '/monocle' => 'monocle#index', :as => :monocle
 

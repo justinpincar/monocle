@@ -79,7 +79,7 @@
               <div class="right">
                 <% if account_signed_in? %>
                     <a href="<%= destroy_account_session_path %>" id="user_nav"><span class="weak">Sign out</span></a>
-                    <a href="<%= account_path(current_account) %>" id="user_nav"><span class="weak"><%= current_account.email %></span></a>
+                    <a href="<%= account_path %>" id="user_nav"><span class="weak"><%= current_account.email %></span></a>
                 <% else %>
                     <span id="user_nav">
                         <a href="<%= new_account_session_path %>">Log in</a>
