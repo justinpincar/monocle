@@ -3,9 +3,5 @@ This is the users index.<br />
 Total users: <%= @users.count %><br />
 <br />
 <% @users.each do |user| %>
- Id: <%= user._id %><br />
-    <% user.analytics(current_account.id).each do |analytic| %>
-        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %><br />
-    <% end %>
-    <br />
+ Id: <%= link_to user._id, user_path(user._id) %> (last seen <%= user.u_at %>)<br />
 <% end %>

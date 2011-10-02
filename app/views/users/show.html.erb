@@ -1,0 +1,7 @@
+
+Id: <%= @user._id %><br />
+<br />
+    <% @user.analytics(current_account.id).each do |analytic| %>
+        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %><br />
+    <% end %>
+    <br />

@@ -13,7 +13,7 @@ class User
   end
 
   def analytics(account_id)
-    Analytic.for_user(account_id, _id)
+    Analytic.for_user(account_id, self._id)
   end
 
   def self.all(account_id)
@@ -26,5 +26,11 @@ class User
     end
 
     users
+  end
+
+  def self.find(account_id, id)
+    id = BSON::ObjectId.from_string(id) if id.is_a?(String)
+    params = @@db.collection("users_#{account_id}").find({_id: id}).first
+    User.build(params)
   end
 end
