@@ -14,7 +14,7 @@
     </div>
     Event trail:<br/>
     <% @session.analytics(current_account.id).each do |analytic| %>
-        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %>
+        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Visited: #{analytic.data['h']}" %>
         <br/>
     <% end %>
   </div>

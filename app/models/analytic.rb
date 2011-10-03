@@ -20,7 +20,10 @@ class Analytic
     analytics = []
 
     session_id = BSON::ObjectId.from_string(session_id) if session_id.is_a?(String)
-    analytics_params = @@db.collection("analytics_#{account_id}").find({"u" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
+
+    # analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
+    analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id}).sort(["ts", -1])
+
     analytics_params.each do |params|
       analytic = Analytic.build(account_id, params)
       analytics.push(analytic)
