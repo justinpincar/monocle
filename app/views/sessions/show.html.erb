@@ -1,0 +1,21 @@
+<div class="main">
+  <h1>Session :: <%= @session.display %></h1>
+  <div>
+    <div style="float:right; border: 1px solid black; padding: 6px;">
+        <h3>Session Dossier</h3>
+        <div>
+          Id: <%= @session.id || "(unknown)" %><br />
+          Name: <%= @session.name || "(unknown)" %><br />
+          Email: <%= @session.email || "(unknown)" %><br />
+          First seen: <%= @session.c_at %><br />
+          Last seen: <%= @session.u_at %><br />
+          SysId: <%= @session._id %><br />
+        </div>
+    </div>
+    Event trail:<br/>
+    <% @session.analytics(current_account.id).each do |analytic| %>
+        <%= analytic.ts %>: <%= analytic.event.try(:display) || "Unknown event" %>
+        <br/>
+    <% end %>
+  </div>
+</div>

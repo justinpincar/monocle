@@ -1,6 +1,14 @@
 <script type="text/javascript">
   var _maq_accountId = '<%= accountId %>';
 
+  <% if accountId == '4e868f5702d91a0217000004' and account_signed_in? %>
+    var _maq_identify = {id: '<%= current_account.id %>', email: '<%= current_account.email %>'};
+  <% else %>
+  // Optional - You can provide us with the user's identity.
+  //          - We will use this to merge user sessions, so be careful!
+  // var _maq_identify = {id: userId, email: userEmail, name: userName};
+ <% end %>
+
   var _maq = _maq || [];
   _maq.push(['_trackPageview']);
   (function() {

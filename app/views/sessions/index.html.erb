@@ -1,0 +1,11 @@
+<div class="main">
+  <h1>Sessions</h1>
+
+  <br/>
+  Total sessions: <%= @sessions.count %>
+  <br/>
+  <br/>
+  <% @sessions.each do |session| %>
+      <%= link_to (session.display || session._id), session_path(session._id) %> (last seen <%= session.u_at %>)<br/>
+  <% end %>
+</div>

@@ -1,8 +1,8 @@
 Monocle::Application.routes.draw do
-  devise_for :accounts
+  devise_for :accounts, :controllers => { :sessions => "accounts/sessions" }
 
   resources :events, :only => [:index, :create, :show, :update]
-  resources :users, :only => [:index, :show]
+  resources :sessions, :only => [:index, :show]
 
   match '/account' => 'accounts#show', :as => :account
 
