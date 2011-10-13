@@ -28,25 +28,52 @@
         this.receive = function(message) {
             window.messages.push(message);
 
-            var userId = message.data.u;
+            var sessionId = message.data.s;
+            var eventId = message.data.d.e;
+            if (typeof eventId != "undefined" && eventId) {
+                var event = events[eventId];
+            }
             var href = message.data.d.h;
             var ts = message.data.ts;
 
-            var block = $('#' + userId);
+            var block = $('#' + sessionId);
             if (block.length == 0) {
-            var messages = $('#messages');
-            block = $('<div id="' + userId + '" class="block"></div>');
-            var trailhead = $('<div class="trailhead"><span>' + userId + '</span></div>');
-            block.append(trailhead);
-            messages.append(block);
+                var messages = $('#messages');
+                block = $('<div id="' + sessionId + '" class="block"></div>');
+                var trailhead = $('<div class="trailhead"><span>' + sessionId + '</span></div>');
+                block.append(trailhead);
+                messages.append(block);
             }
-            var trail = $('<div class="trail">&nbsp;</div>');
+
+            var color = '#FFFFFF';
+            var style = '';
+            if (typeof event != "undefined" && event) {
+                var heat = event.heat;
+                if (typeof heat != "undefined" && heat) {
+                    if (heat >= 75) {
+                        var color = "#FF0000";
+                    }
+                    else if (heat >= 50) {
+                        var color = "#FF8000";
+                    }
+                    else if (heat >= 25) {
+                        var color = "#FFFF00";
+                    }
+                    else {
+                        var color = "#FFFFFF";
+                    }
+
+                    var style = ' style="background-color: ' + color + '"';
+                }
+            }
+
+            var trail = $('<div class="trail"' + style + '>&nbsp;</div>');
             var tip = $('<div class="tooltip"><span>href: ' + href + '</span><br /><span>ts: ' + new Date(ts) + '</span></div>');
             block.append(trail);
             block.append(tip);
             trail.tooltip();
-            trail.css("background-color", "#000000").animate({ backgroundColor: "#FFFFFF"}, 500);
-            };
+            trail.css("background-color", "#000000").animate({ backgroundColor: color}, 500);
+        };
 
         function _unsubscribe() {
             if (_chatSubscription) {

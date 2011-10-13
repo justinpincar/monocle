@@ -1,5 +1,5 @@
 class Event
-  attr_accessor :_id, :display, :type, :c_at, :u_at
+  attr_accessor :_id, :display, :type, :heat, :c_at, :u_at
 
   def self.build(event, params={})
     event_params = params["event"]
@@ -7,6 +7,7 @@ class Event
     event._id = event_params["_id"] if event_params["_id"].present?
     event.type = event_params["type"].to_i if event_params["type"].present?
     event.display = event_params["display"] if event_params["display"].present?
+    event.heat = event_params["heat"].to_i if event_params["heat"].present?
     event.c_at = event_params["c_at"] if event_params["c_at"].present?
     event.u_at = event_params["u_at"] if event_params["u_at"].present?
     event
@@ -15,6 +16,7 @@ class Event
   def update(params={})
     self.type = params["type"].to_i if params["type"].present?
     self.display = params["display"] if params["display"].present?
+    self.heat = params["heat"].to_i if params["heat"].present?
   end
 
   def save(account_id)
@@ -22,9 +24,9 @@ class Event
 
     if self._id.nil?
       self._id = BSON::ObjectId.new
-      @@db.collection("events_#{account_id}").insert({_id: _id, display: display, type: type, c_at: now, u_at: now})
+      @@db.collection("events_#{account_id}").insert({_id: _id, display: display, type: type, heat: heat, c_at: now, u_at: now})
     else
-      @@db.collection("events_#{account_id}").update({_id: _id},  {"$set" => {display: display, type: type, u_at: now}})
+      @@db.collection("events_#{account_id}").update({_id: _id},  {"$set" => {display: display, type: type, heat: heat, u_at: now}})
     end
   end
 

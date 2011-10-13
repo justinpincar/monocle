@@ -6,6 +6,12 @@
     };
     var channel = '<%= current_account.id.to_s %>';
 </script>
+<script>
+  var events = [];
+<% @events.each do |event| %>
+  events['<%= event._id %>'] = <%= ActiveSupport::JSON.encode(event).html_safe %>;
+<% end %>
+</script>
 <script type="text/javascript" src="/javascripts/monocle.js"></script>
 
 <div id="messages">
