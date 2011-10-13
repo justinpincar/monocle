@@ -4,6 +4,7 @@
         window.monocle.join();
 
         window.messages = [];
+        window.timeouts = [];
     });
 
     function Monocle() {
@@ -44,6 +45,9 @@
                 block.append(trailhead);
                 messages.append(block);
             }
+            if (block.is(":hidden")) {
+                block.show('slow');
+            }
 
             var color = '#FFFFFF';
             var style = '';
@@ -73,6 +77,11 @@
             block.append(tip);
             trail.tooltip();
             trail.css("background-color", "#000000").animate({ backgroundColor: color}, 500);
+
+            if (typeof window.timeouts[sessionId] != "undefined") {
+                clearTimeout(window.timeouts[sessionId]);
+            }
+            window.timeouts[sessionId] = setTimeout(function() {block.hide('slow')}, 1000 * 60 * 10);
         };
 
         function _unsubscribe() {
