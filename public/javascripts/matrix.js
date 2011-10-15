@@ -8,12 +8,15 @@ $(function () {
     weekday[4]="Thu";
     weekday[5]="Fri";
     weekday[6]="Sat";
+    d.setUTCHours(0, 0, 0, 0);
+    var start_block = d.getTime() - 1000*60*60*24*7;
 
     // Grab the data
     var blocks = [],
         dts = [],
         lbls = [],
         bgs = [],
+        colors = [],
         dots = [],
         timeouts = [],
         data = [],
@@ -50,21 +53,25 @@ $(function () {
         X = (width - leftgutter) / axisx.length,
         Y = (height - bottomgutter) / axisy.length,
         color = $("#chart").css("color");
-        max = Math.round(X / 2) - 1;
+        max = Math.round(X / 2) - 1,
+        bg_threshold = 6;
 
     var scale = (getParameterByName("scale") || 5);
     function getRadius(value) {
         return Math.min(Math.round(Math.sqrt(value / Math.PI) * scale), max)
     }
 
+    function getColor(R) {
+        return "hsb(" + [(1 - R / max) * .5, 1, .75] + ")";
+    }
+
     $.getJSON('/matrix/preload_data', function(response) {
         for (var i=0; i < response.results.length; i++) {
             var row = response.results[i];
             blocks[row._id] = row.value.count;
+            blocks[row._id] = 4;
+            console.log("blocks[" + row._id + "] assigned");
         }
-
-        d.setUTCHours(0, 0, 0, 0);
-        var start_block = d.getTime() - 1000*60*60*24*7;
 
         for (var i=0; i < 24*8; i++) {
             var current_block = start_block + i*1000*60*60;
@@ -90,11 +97,25 @@ $(function () {
         }
     });
 
+    function calculate_i_j_from_ts(ts) {
+        ts.setUTCMinutes(0, 0, 0);
+        var o = 0;
+        for (var i = 0, ii = axisy.length; i < ii; i++) {
+            for (var j = 0, jj = axisx.length; j < jj; j++) {
+                var block_ts = start_block + o*1000*60*60;
+                if (block_ts == ts.getTime()) {
+                    return {i: i, j: j};
+                }
+            }
+        }
+    }
+
     function draw_dot(dx, dy, R, value, block_ts) {
-        var color = "hsb(" + [(1 - R / max) * .5, 1, .75] + ")";
+        var color = getColor(R);
+        colors[block_ts] = color;
         var dt = r.circle(dx + 60 + R, dy + 10, 0).attr({stroke: "none", fill: color}).animate({r: R}, Math.random()*6000, "bounce");
         dts[block_ts] = dt;
-        if (R < 6) {
+        if (R < bg_threshold) {
             var bg = r.circle(dx + 60 + R, dy + 10, 6).attr({stroke: "none", fill: "#000", opacity: .4}).hide();
             bgs[block_ts] = bg;
         }
@@ -104,9 +125,9 @@ $(function () {
         var dot = r.circle(dx + 60 + R, dy + 10, max).attr({stroke: "none", fill: "#000", opacity: 0});
         dots[block_ts] = dot;
 
-        console.log("dots[" + block_ts + "] assigned");
-
         dot[0].onmouseover = function () {
+            var bg = bgs[block_ts];
+            var color = colors[block_ts];
             if (bg) {
                 bg.show();
             } else {
@@ -117,6 +138,8 @@ $(function () {
             lbl.show();
         };
         dot[0].onmouseout = function () {
+            var bg = bgs[block_ts];
+            var color = colors[block_ts];
             if (bg) {
                 bg.hide();
             } else {
@@ -155,20 +178,34 @@ $(function () {
 
             var value = blocks[ts.getTime()];
             if (typeof value == "undefined" || !value) {
-
+                var obj = calculate_i_j_from_ts(ts);
+                console.log("i: " + obj.i);
+                console.log("j: " + obj.j);
             }
             else {
                 value++;
                 blocks[ts.getTime()] = value;
-                var dot = dots[ts.getTime()];
-                dot.animate({r: getRadius(value)}, 500, "backOut");
+                var dt = dts[ts.getTime()];
+                var radius = getRadius(value);
+                var color = getColor(radius);
+                if (radius >= bg_threshold) {
+                    var bg = bgs[ts.getTime()];
+                    if (typeof bg != "undefined" && bg) {
+                        bg.hide();
+                    }
+                    bgs[ts.getTime()] = null;
+                }
+                colors[ts.getTime()] = color;
+                dt.attr({fill: color});
+                dt.animate({r: radius}, 500, "backOut");
                 var lbl = lbls[ts.getTime()];
                 lbl.attr({text: value});
-                lbl.show('fast');
+                var dot = dots[ts.getTime()];
+                dot[0].onmouseover();
                 if (typeof timeouts[ts.getTime()] != "undefined") {
                     clearTimeout(timeouts[ts.getTime()]);
                 }
-                timeouts[ts.getTime()] = setTimeout(function() {lbl.hide('slow')}, 5000);
+                timeouts[ts.getTime()] = setTimeout(dot[0].onmouseout, 5000);
             }
         };
 
