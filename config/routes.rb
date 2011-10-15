@@ -2,10 +2,14 @@ Monocle::Application.routes.draw do
   devise_for :accounts, :controllers => { :sessions => "accounts/sessions" }
 
   resources :events, :only => [:index, :create, :show, :update]
+  resources :matrix, :only => [:index] do
+    collection do
+      get :preload_data
+    end
+  end
   resources :sessions, :only => [:index, :show]
 
   match '/account' => 'accounts#show', :as => :account
-
   match '/monocle' => 'monocle#index', :as => :monocle
 
   match '/about' => 'home#about', :as => :about

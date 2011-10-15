@@ -21,7 +21,7 @@ class Analytic
 
     session_id = BSON::ObjectId.from_string(session_id) if session_id.is_a?(String)
 
-    # analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
+      # analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
     analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id}).sort(["ts", -1])
 
     analytics_params.each do |params|
@@ -30,5 +30,23 @@ class Analytic
     end
 
     analytics
+  end
+
+  @@map_preload_matrix_blocks = "function() { var ts = this.ts; ts.setMinutes(0, 0, 0); emit(ts.getTime(), {count: 1}); }"
+
+  @@reduce_preload_matrix_blocks =
+      "function(key, values) { " +
+        "var sum = 0; " +
+        "values.forEach(function(f) { " +
+          " sum += f.count; " +
+        "}); " +
+        "return {count: sum};" +
+      "};"
+
+  def self.preload_matrix_blocks(account_id)
+    blocks = @@db.collection("analytics_#{account_id}")
+      .map_reduce(@@map_preload_matrix_blocks, @@reduce_preload_matrix_blocks, {:raw => true, 'out' => {'inline' => true}, 'query' => {'ts' => {'$gt' => 7.days.ago.utc.at_beginning_of_day}}})
+
+    blocks
   end
 end

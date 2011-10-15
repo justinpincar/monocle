@@ -1,0 +1,44 @@
+<span id="matrix-status" style="float: right; border: 1px solid black; height: 20px; width:120px; line-height: 20px; text-align: center;">Pending</span>
+<h1>Matrix</h1>
+<script type="text/javascript">
+    var config = {
+        contextPath: '/'
+    };
+    var channel = '<%= current_account.id.to_s %>';
+</script>
+
+<script src="/javascripts/raphael.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/matrix.js" type="text/javascript" charset="utf-8"></script>
+
+<table id="for-chart" style="display:none;">
+    <tfoot>
+        <tr>
+          <td>&nbsp;</td>
+          <th>12am</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+          <th>11</th>
+          <th>12pm</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+          <th>6</th>
+          <th>7</th>
+          <th>8</th>
+          <th>9</th>
+          <th>10</th>
+          <th>11</th>
+        </tr>
+    </tfoot>
+</table>
+<div id="chart"></div>

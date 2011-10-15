@@ -44,8 +44,15 @@ class Event
 
   @events = {}
   def self.find(account_id, id)
-    id = BSON::ObjectId.from_string(id) if id.is_a?(String)
-    @events[id] ||= generate(@@db.collection("events_#{account_id}").find({_id: id}).first)
+    begin
+      id = BSON::ObjectId.from_string(id) if id.is_a?(String)
+    rescue
+      id = nil
+    end
+
+    if id.present?
+      @events[id] ||= generate(@@db.collection("events_#{account_id}").find({_id: id}).first)
+    end
   end
 
   private

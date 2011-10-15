@@ -100,15 +100,15 @@
         }
 
         function _connectionEstablished() {
-	    alert("Connection established.");
+            alert("Connection established.");
         }
 
         function _connectionBroken() {
-	    alert("Connection broken.");
+            alert("Connection broken.");
         }
 
         function _connectionClosed() {
-	    alert("Connection closed.");
+            alert("Connection closed.");
         }
 
         function _metaConnect(message) {
