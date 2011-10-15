@@ -69,8 +69,6 @@ $(function () {
         for (var i=0; i < response.results.length; i++) {
             var row = response.results[i];
             blocks[row._id] = row.value.count;
-            blocks[row._id] = 4;
-            console.log("blocks[" + row._id + "] assigned");
         }
 
         for (var i=0; i < 24*8; i++) {
@@ -84,6 +82,7 @@ $(function () {
         for (var i = 0, ii = axisy.length; i < ii; i++) {
             r.text(10, Y * (i + .5), axisy[i]).attr(txt);
         }
+
         var o = 0;
         for (var i = 0, ii = axisy.length; i < ii; i++) {
             for (var j = 0, jj = axisx.length; j < jj; j++) {
@@ -106,6 +105,7 @@ $(function () {
                 if (block_ts == ts.getTime()) {
                     return {i: i, j: j};
                 }
+                o++;
             }
         }
     }
@@ -147,6 +147,8 @@ $(function () {
             }
             lbl.hide();
         };
+
+        return dot;
     }
 
     window.matrix = new Matrix();
@@ -179,8 +181,13 @@ $(function () {
             var value = blocks[ts.getTime()];
             if (typeof value == "undefined" || !value) {
                 var obj = calculate_i_j_from_ts(ts);
-                console.log("i: " + obj.i);
-                console.log("j: " + obj.j);
+                var i = obj.i;
+                var j = obj.j;
+                var R = getRadius(1);
+                blocks[ts.getTime()] = 1;
+                var dot = draw_dot(leftgutter + X * (j + .5) - 60 - R, Y * (i + .5) - 10, R, 1, ts.getTime());
+                dot[0].onmouseover();
+                timeouts[ts.getTime()] = setTimeout(dot[0].onmouseout, 5000);
             }
             else {
                 value++;
