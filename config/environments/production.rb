@@ -49,6 +49,6 @@ Monocle::Application.configure do
 
   Monocle::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Exception] ",
-  :sender_address => %{"notifier" <notifications@monocle.org>},
+  :sender_address => %{"notifier" <notifications@sidesp.in>},
   :exception_recipients => %w{justinpincar@gmail.com}
 end
