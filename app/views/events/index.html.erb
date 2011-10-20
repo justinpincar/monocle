@@ -1,3 +1,7 @@
+
+<script src="/javascripts/raphael.js" type="text/javascript" charset="utf-8"></script>
+<script src="/javascripts/sparkline.js" type="text/javascript" charset="utf-8"></script>
+
 <div class="main">
   <h1>Events</h1>
 
@@ -19,6 +23,9 @@
     <br/>
     <br/>
     <% @events.each do |event| %>
+        <div style="display: inline-block; padding: 10px; margin: 4px; border: 1px solid black;">
+     <div style="float:left">
+    <div style="height: 80px;  margin-auto; display:table-cell; vertical-align: middle;">
         <% case event.type %>
         <% when 0 %>
             UrlEvent
@@ -26,9 +33,59 @@
             Unknown
         <% end %>
 
-        | <%= link_to(event.display, event_path(event._id)) %><br />
+        <br /><%= link_to(event.display, event_path(event._id)) %>
+     </div></div>
+     <div id="chart_<%= event._id %>" style="float:left; width: 200px; height:80px;"></div>
+        <script>
+            var days=new Array(7);
+            days[0]="Sun";
+            days[1]="Mon";
+            days[2]="Tue";
+            days[3]="Wed";
+            days[4]="Thu";
+            days[5]="Fri";
+            days[6]="Sat";
+
+            var months=new Array(12);
+            months[0]="Jan";
+            months[1]="Feb";
+            months[2]="Mar";
+            months[3]="Apr";
+            months[4]="May";
+            months[5]="Jun";
+            months[6]="Jul";
+            months[7]="Aug";
+            months[8]="Sep";
+            months[9]="Oct";
+            months[10]="Nov";
+            months[11]="Dec";
+
+          $(function() {
+            var blocks = [];
+            <% event.seven_day_blocks(current_account.id)["results"].each do |datum| %>
+                blocks[<%= datum['_id'] %>] = <%= datum['value']['count'] %>;
+            <% end %>
+
+            var d=new Date();
+            d.setUTCHours(0, 0, 0, 0);
+            var start_block = d.getTime() - 1000*60*60*24*7;
+            var labels = [];
+            var data = [];
+            for (var i=0; i < 8; i++) {
+                var ts = new Date(start_block + (i * 1000*60*60*24));
+
+                labels.push(days[ts.getUTCDay()] + ', ' + ts.getUTCDate() + ' ' + months[ts.getUTCMonth()] + ' ' + ts.getUTCFullYear());
+                var value = (typeof blocks[ts.getTime()] == "undefined") ? 0 : blocks[ts.getTime()];
+                data.push(value);
+            }
+
+                r = Raphael("chart_<%= event._id %>", 200, 80);
+                r.sparkline(200, 80, labels, data);
+          });
+        </script>
+          </div>
+    <br style="clear:left;"/>
     <% end %>
-    <br/>
     <br/>
   </div>
 </div>

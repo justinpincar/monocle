@@ -55,6 +55,25 @@ class Event
     end
   end
 
+
+  @@map_seven_day_blocks = "function() { var ts = this.ts; ts.setHours(0, 0, 0, 0); emit(ts.getTime(), {count: 1}); }"
+
+  @@reduce_seven_day_blocks =
+      "function(key, values) { " +
+        "var sum = 0; " +
+        "values.forEach(function(f) { " +
+          " sum += f.count; " +
+        "}); " +
+        "return {count: sum};" +
+      "};"
+
+  def seven_day_blocks(account_id)
+    blocks = @@db.collection("analytics_#{account_id}")
+      .map_reduce(@@map_seven_day_blocks, @@reduce_seven_day_blocks, {:raw => true, 'out' => {'inline' => true}, 'query' => {'ts' => {'$gt' => 7.days.ago.utc.at_beginning_of_day}, 'd.e' => _id}})
+
+    blocks
+  end
+
   private
 
   def self.generate(params)
