@@ -4,7 +4,7 @@ class MatrixController < ApplicationController
   def index; end
 
   def preload_data
-    @blocks = Analytic.preload_matrix_blocks(current_account.id)
+    @blocks = Analytic.preload_matrix_blocks(current_account.id) || {}
 
     respond_to do |format|
       format.js { render :json => @blocks.to_json }
