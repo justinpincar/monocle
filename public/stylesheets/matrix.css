@@ -1,18 +1,12 @@
 #holder {
     height: 520px;
-    left: 50%;
-    margin: -260px 0 0 -320px;
-    position: absolute;
-    top: 50%;
     width: 640px;
+    margin: 0 auto;
 }
 
 #chart {
     color: #333;
-    left: 50%;
-    margin: -170px 0 0 -400px;
-    position: absolute;
-    top: 50%;
     height: 340px;
     width: 800px;
+    margin: 0 auto;
 }
