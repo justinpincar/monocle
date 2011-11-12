@@ -7,6 +7,9 @@
           Id: <%= @session.id || "(unknown)" %><br />
           Name: <%= @session.name || "(unknown)" %><br />
           Email: <%= @session.email || "(unknown)" %><br />
+          <% (@session.ips || []).each do |ip| %>
+          Ip: <%= ip %><br />
+          <% end %>
           First seen: <%= @session.c_at %><br />
           Last seen: <%= @session.u_at %><br />
           SysId: <%= @session._id %><br />

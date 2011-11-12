@@ -114,6 +114,22 @@ function ma_load_fallback() {
     setTimeout("if (!ma_loaded) { ma_load() }", 0);
 }
 
+function doScrollCheck() {
+    if (ma_loaded) {
+        return;
+    }
+
+    try {
+        document.documentElement.doScroll("left");
+    } catch(e) {
+        setTimeout(doScrollCheck, 1);
+        return;
+    }
+
+    ma_loaded = 1;
+    ma_load();
+}
+
 var ma_loaded = 0;
 if (document.addEventListener) {
     document.addEventListener("DOMContentLoaded", function() {
@@ -122,14 +138,7 @@ if (document.addEventListener) {
     }, false);
 }
 else if (document.all && !window.opera) {
-    document.write('<script type="text/javascript" id="contentloadtag" defer="defer" src="javascript:void(0)"><\/script>');
-    var contentloadtag = document.getElementById("contentloadtag");
-    contentloadtag.onreadystatechange = function() {
-        if (this.readyState == "complete") {
-            ma_loaded = 1;
-            ma_load();
-        }
-    };
+    doScrollCheck();
 }
 
 if (window.addEventListener) {

@@ -30,6 +30,10 @@ class Event
     end
   end
 
+  def destroy(account_id)
+    @@db.collection("events_#{account_id}").remove({_id: self._id})
+  end
+
   def self.all(account_id)
     events = []
 

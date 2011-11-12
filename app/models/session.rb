@@ -1,5 +1,5 @@
 class Session
-  attr_accessor :_id, :id, :email, :name, :c_at, :u_at
+  attr_accessor :_id, :id, :email, :name, :ips, :c_at, :u_at
 
   def self.build(params={})
     session = Session.new
@@ -10,6 +10,7 @@ class Session
     session.name = params["d"] if params["d"].present?
     session.c_at = params["c_at"] if params["c_at"].present?
     session.u_at = params["u_at"] if params["u_at"].present?
+    session.ips = params["ips"] if params["ips"].present?
     session
   end
 

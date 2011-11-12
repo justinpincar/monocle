@@ -1,10 +1,16 @@
 (function($) {
     $(document).ready(function() {
-        window.monocle = new Monocle();
-        window.monocle.join();
-
         window.messages = [];
         window.timeouts = [];
+        window.monocle = new Monocle();
+
+        if (typeof local_messages != "undefined") {
+            for (var i = 0; i < local_messages.length; i++) {
+                window.monocle.receive({data: local_messages[i]});
+            }
+        }
+
+        window.monocle.join();
     });
 
     function Monocle() {
@@ -41,7 +47,13 @@
             if (block.length == 0) {
                 var messages = $('#messages');
                 block = $('<div id="' + sessionId + '" class="block"></div>');
-                var trailhead = $('<div class="trailhead"><span>' + sessionId + '</span></div>');
+                if (typeof sessions[sessionId] == "undefined") {
+                    var display = sessionId;
+                }
+                else {
+                    var display = sessions[sessionId];
+                }
+                var trailhead = $('<div class="trailhead"><span>' + display + '</span></div>');
                 block.append(trailhead);
                 messages.append(block);
             }

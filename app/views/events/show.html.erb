@@ -13,7 +13,7 @@
           <br/>
           Heat: <%= text_field_tag("event[heat]", @event.heat) %>
           <br/>
-          <%= submit_tag("Update") %>
+          <%= submit_tag("Update") %>&nbsp;&nbsp;&nbsp;<%= link_to "(destroy)", event_path(@event._id), :method => :delete, :confirm => "Really destroy?" %>
       <% end %>
     </div>
 

@@ -11,6 +11,14 @@
 <% @events.each do |event| %>
   events['<%= event._id %>'] = <%= ActiveSupport::JSON.encode(event).html_safe %>;
 <% end %>
+  var sessions = [];
+<% @sessions.each do |session| %>
+  sessions['<%= session._id %>'] = "<%= session.display %>";
+<% end %>
+  var local_messages = [];
+<% @analytics.each do |analytic| %>
+  local_messages.push({s: '<%= analytic.s %>', d: <%= ActiveSupport::JSON.encode(analytic.data).html_safe %>, ts: '<%= analytic.ts %>'});
+<% end %>
 </script>
 <script type="text/javascript" src="/javascripts/monocle.js"></script>
 
