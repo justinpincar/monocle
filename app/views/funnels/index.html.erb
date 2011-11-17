@@ -1,0 +1,15 @@
+<div class="main">
+  <h1>Funnels</h1>
+
+  <div>
+    Total funnels: <%= @funnels.count %>
+    <br/>
+    <br/>
+    <% @funnels.each do |funnel| %>
+        <%= link_to funnel.name, funnel_path(funnel._id.to_s) %><br />
+    <% end %>
+    <br />
+    <br />
+    <%=  link_to "New Funnel", new_funnel_path %>
+  </div>
+</div>

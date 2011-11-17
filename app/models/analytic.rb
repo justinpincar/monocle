@@ -22,7 +22,7 @@ class Analytic
 
     session_id = BSON::ObjectId.from_string(session_id) if session_id.is_a?(String)
 
-      # analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
+    # analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id, "d.e" => {"$exists" => true}}).sort(["ts", -1])
     analytics_params = @@db.collection("analytics_#{account_id}").find({"s" => session_id}).sort(["ts", -1])
 
     analytics_params.each do |params|
@@ -33,10 +33,14 @@ class Analytic
     analytics
   end
 
-  def self.since(account_id, time)
+  def self.since(account_id, time, event_id=nil)
     analytics = []
 
-    analytics_params = @@db.collection("analytics_#{account_id}").find({"ts" => {"$gt" => time.utc}}).sort(["ts", -1])
+    if event_id.present?
+      analytics_params = @@db.collection("analytics_#{account_id}").find({"ts" => {"$gt" => time.utc}, "d.e" => event_id}).sort(["ts", -1])
+    else
+      analytics_params = @@db.collection("analytics_#{account_id}").find({"ts" => {"$gt" => time.utc}}).sort(["ts", -1])
+    end
 
     analytics_params.each do |params|
       analytic = Analytic.build(account_id, params)
@@ -50,16 +54,15 @@ class Analytic
 
   @@reduce_preload_matrix_blocks =
       "function(key, values) { " +
-        "var sum = 0; " +
-        "values.forEach(function(f) { " +
+          "var sum = 0; " +
+          "values.forEach(function(f) { " +
           " sum += f.count; " +
-        "}); " +
-        "return {count: sum};" +
-      "};"
+          "}); " +
+          "return {count: sum};" +
+          "};"
 
   def self.preload_matrix_blocks(account_id)
-    blocks = @@db.collection("analytics_#{account_id}")
-      .map_reduce(@@map_preload_matrix_blocks, @@reduce_preload_matrix_blocks, {:raw => true, 'out' => {'inline' => true}, 'query' => {'ts' => {'$gt' => 7.days.ago.utc.at_beginning_of_day}}})
+    blocks = @@db.collection("analytics_#{account_id}").map_reduce(@@map_preload_matrix_blocks, @@reduce_preload_matrix_blocks, {:raw => true, 'out' => {'inline' => true}, 'query' => {'ts' => {'$gt' => 7.days.ago.utc.at_beginning_of_day}}})
 
     blocks
   end

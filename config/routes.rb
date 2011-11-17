@@ -2,6 +2,7 @@ Monocle::Application.routes.draw do
   devise_for :accounts, :controllers => { :sessions => "accounts/sessions" }
 
   resources :events, :only => [:index, :create, :show, :update, :destroy]
+  resources :funnels, :only => [:index, :new, :create, :show, :edit, :update, :destroy]
   resources :matrix, :only => [:index] do
     collection do
       get :preload_data

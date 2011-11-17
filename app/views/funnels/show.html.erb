@@ -1,0 +1,24 @@
+<div class="main">
+  <h1>Funnel :: <%= @funnel.name %></h1>
+
+  <div>
+    Id: <%= @funnel._id %>
+    <br/>
+    Created At: <%= @funnel.c_at %>
+    <br/>
+    Updated At: <%= @funnel.u_at %>
+    <br/>
+    Events:
+    <ul>
+      <% @funnel.events(current_account.id).each do |event| %>
+          <li>
+            <%= event.display %> - <%= Analytic.since(current_account.id, 7.days.ago, event._id).count %>
+
+          </li>
+      <% end %>
+    </ul>
+    <br/>
+    <br/>
+    <%= link_to "Edit", edit_funnel_path(@funnel._id.to_s) %>
+  </div>
+</div>

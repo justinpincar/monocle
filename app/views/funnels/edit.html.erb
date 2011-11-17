@@ -1,0 +1,15 @@
+<div class="main">
+  <h1>Edit Funnel</h1>
+
+  <%= form_tag(funnel_path(@funnel._id.to_s), :method => "put") do %>
+      Name<%= text_field_tag("funnel[name]", @funnel.name) %>
+      <br/>
+      <% @events.each do |event| %>
+        <%= event.display %><%= check_box_tag "funnel[e_ids][]", event._id.to_s, @funnel.e_ids.include?(event._id), {} %><br />
+      <% end %>
+      <%= submit_tag("Update") %>
+  <% end %>
+  <br />
+  <br />
+  <%= link_to "(destroy)", funnel_path(@funnel._id.to_s), :method => :delete, :confirm => "Really destroy?" %>
+</div>

@@ -1,0 +1,12 @@
+<div class="main">
+  <h1>New Funnel</h1>
+
+  <%= form_tag(funnels_path, :method => "post") do %>
+      Name<%= text_field_tag("funnel[name]") %>
+      <br/>
+      <% @events.each do |event| %>
+        <%= event.display %><%= check_box_tag "funnel[e_ids][]", event._id.to_s, false, {} %><br />
+      <% end %>
+      <%= submit_tag("Define") %>
+  <% end %>
+</div>
