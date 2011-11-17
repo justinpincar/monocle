@@ -1,3 +1,49 @@
+<style>
+    .chart {
+        display: inline-block;
+        color: #333;
+        height: 300px;
+        width: 300px;
+        margin: 0 auto;
+    }
+</style>
+
+<script>
+    function drawTargetChart(id, size, values) {
+        var strokeWidth = 2;
+        var radius = (size - strokeWidth) / 2.0;
+        var r = Raphael(id, size, size);
+
+        function getR(area) {
+            return Math.sqrt(area / 3.14);
+        }
+
+        var area = radius * radius * 3.14;
+
+        var max = 0;
+        for (var i = 0; i < values.length; i++) {
+            if (values[i] > max) {
+                max = values[i];
+            }
+        }
+
+        var scale = area / max;
+        var attrs = function (start) {
+            sColor = Raphael.hsb(start, 0.75, 1);
+            eColor = Raphael.hsb(start, 1, 1);
+            return {"stroke-width":strokeWidth, fill:"90-" + eColor + "-" + sColor};
+        }
+
+        var color = 0;
+        for (var i = 0; i < values.length; i++) {
+            r.circle(size / 2, size / 2, getR(scale * values[i])).attr(attrs(color));
+            color += 0.1;
+        }
+    }
+
+    events = new Array;
+</script>
+
 <div class="main">
   <h1>Funnel :: <%= @funnel.name %></h1>
 
@@ -12,13 +58,45 @@
     <ul>
       <% @funnel.events(current_account.id).each do |event| %>
           <li>
-            <%= event.display %> - <%= Analytic.since(current_account.id, 7.days.ago, event._id).count %>
-
+            <%
+               period_30 = Analytic.since(current_account.id, 30.days.ago, event._id).count
+               period_7 = Analytic.since(current_account.id, 7.days.ago, event._id).count
+               period_1 = Analytic.since(current_account.id, 1.days.ago, event._id).count
+            %>
+            <%= event.display %> - <%= period_30 %>, <%= period_7 %>, <%= period_1 %>
+            <script>
+                var values = [<%= period_30 %>, <%= period_7 %>, <%= period_1 %>];
+                events.push(values);
+            </script>
           </li>
       <% end %>
     </ul>
+
+    <script src="/javascripts/raphael.js" type="text/javascript" charset="utf-8"></script>
+
+    <div id="chart1" class="chart"></div>
+    <div id="chart2" class="chart"></div>
+    <div id="chart3" class="chart"></div>
+
     <br/>
     <br/>
     <%= link_to "Edit", edit_funnel_path(@funnel._id.to_s) %>
   </div>
 </div>
+
+<script>
+    function eventSort(a, b) {
+        return b[0] - a[0];
+    }
+
+    var eventsSorted = events.sort(eventSort);
+
+    for (var i = 0; i < 3; i++) {
+        var values = new Array;
+        for (var j = 0; j < events.length; j++) {
+            values.push(events[j][i]);
+        }
+
+        drawTargetChart("chart" + (i+1), 202, values);
+    }
+</script>
