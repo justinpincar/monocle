@@ -157,23 +157,22 @@ $(function () {
         var _self = this;
 
         this.join = function() {
-            var cometdURL = location.protocol + "//" + location.host + config.contextPath + "/cometd";
-
-            $.cometd.websocketEnabled = true;
-            $.cometd.configure({
-                url: cometdURL,
-                logLevel: 'debug'
-            });
-            $.cometd.handshake();
+	    var monocle_socket = io.connect('http://trisse.com:8000/monocle_meta');
+	    monocle_socket.on('connect', function () {
+		    $('#monocle-status').html("Connected");
+		    $('#monocle-status').css("border", "1px solid black");
+		    $('#monocle-status').css("color", "black");
+		});
+	    monocle_socket.on('connect_failed', function () {
+		    $('#monocle-status').html("Disconnected");
+		    $('#monocle-status').css("border", "1px solid red");
+		    $('#monocle-status').css("color", "red");
+		});
+	    monocle_socket.on('analytic', this.receive);
         };
 
-        this.leave = function() {
-            _unsubscribe();
-            $.cometd.disconnect();
-        };
-
-        this.receive = function(message) {
-            var ts = message.data.ts;
+        this.receive = function(data) {
+            var ts = data.ts;
 
             ts = new Date(ts);
             ts.setUTCMinutes(0, 0, 0);
@@ -215,77 +214,5 @@ $(function () {
                 timeouts[ts.getTime()] = setTimeout(dot[0].onmouseout, 5000);
             }
         };
-
-        function _unsubscribe() {
-            if (_chatSubscription) {
-                $.cometd.unsubscribe(_chatSubscription);
-            }
-            _chatSubscription = null;
-        }
-
-        function _subscribe() {
-            _chatSubscription = $.cometd.subscribe('/chat/' + channel, _self.receive);
-        }
-
-        function _connectionInitialized() {
-            _subscribe();
-        }
-
-        function _connectionEstablished() {
-            alert("Connection established.");
-        }
-
-        function _connectionBroken() {
-            alert("Connection broken.");
-        }
-
-        function _connectionClosed() {
-            alert("Connection closed.");
-        }
-
-        function _metaConnect(message) {
-            if (message.successful) {
-                $('#matrix-status').html("Connected");
-                $('#matrix-status').css("border", "1px solid black");
-                $('#matrix-status').css("color", "black");
-            } else {
-                $('#matrix-status').html("Disconnected");
-                $('#matrix-status').css("border", "1px solid red");
-                $('#matrix-status').css("color", "red");
-            }
-
-            if (_disconnecting) {
-                _connected = false;
-                _connectionClosed();
-            }
-            else {
-                _wasConnected = _connected;
-                _connected = message.successful === true;
-                if (!_wasConnected && _connected) {
-                    _connectionEstablished();
-                }
-                else if (_wasConnected && !_connected) {
-                    _connectionBroken();
-                }
-            }
-        }
-
-        function _metaHandshake(message) {
-            if (message.successful) {
-                _connectionInitialized();
-            }
-        }
-
-        $.cometd.addListener('/meta/handshake', _metaHandshake);
-        $.cometd.addListener('/meta/connect', _metaConnect);
-
-        $(window).unload(function() {
-            if ($.cometd.reload) {
-                $.cometd.reload();
-            }
-            else {
-                $.cometd.disconnect();
-            }
-        });
     }
 });
