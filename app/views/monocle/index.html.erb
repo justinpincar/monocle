@@ -20,6 +20,7 @@
   local_messages.push({s: '<%= analytic.s %>', d: <%= ActiveSupport::JSON.encode(analytic.data).html_safe %>, ts: '<%= analytic.ts %>'});
 <% end %>
 </script>
+<script type="text/javascript" src="http://trisse.com:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/javascripts/monocle.js"></script>
 
 <div id="messages">
