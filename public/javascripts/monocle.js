@@ -16,18 +16,25 @@
     function Monocle() {
         var _self = this;
 
+	this.socket_ok = function() {
+	    $('#monocle-status').html("Connected");
+	    $('#monocle-status').css("border", "1px solid black");
+	    $('#monocle-status').css("color", "black");
+	}
+
+	this.socket_error = function() {
+	    $('#monocle-status').html("Disconnected");
+	    $('#monocle-status').css("border", "1px solid red");
+	    $('#monocle-status').css("color", "red");
+	}
+
         this.join = function() {
 	    var monocle_socket = io.connect('http://trisse.com:8000/monocle_meta');
-	    monocle_socket.on('connect', function () {
-		    $('#monocle-status').html("Connected");
-		    $('#monocle-status').css("border", "1px solid black");
-		    $('#monocle-status').css("color", "black");
-		});
-	    monocle_socket.on('connect_failed', function () {
-		    $('#monocle-status').html("Disconnected");
-		    $('#monocle-status').css("border", "1px solid red");
-		    $('#monocle-status').css("color", "red");
-		});
+	    monocle_socket.on('connect', this.socket_ok);
+	    monocle_socket.on('reconnect', this.socket_ok);
+	    monocle_socket.on('disconnect', this.socket_error);
+	    monocle_socket.on('connect_failed', this.socket_error);
+	    monocle_socket.on('reconnect_failed', this.socket_error);
 	    monocle_socket.on('analytic', this.receive);
         };
 
